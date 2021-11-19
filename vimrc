@@ -68,10 +68,40 @@ set shiftwidth=4
 set expandtab
 
 " Show the current pair of brackets.
-set showmatch
+" set showmatch
 
 " Automatically remove useless whitespace.
 autocmd BufWritePre * :%s/\s\+$//e
 
 " Set noexpandtab when file type is makefile.
 autocmd FileType make setlocal noexpandtab
+
+" Automatic insert a closing bracket when type single quotation mark
+inoremap ' ''<left>
+inoremap '' ''
+
+" Automatic insert a closing brackets when type double quotation mark
+inoremap " ""<left>
+inoremap "" ""
+
+" Automatic insert a closing brackets when type parentheses bracket
+inoremap ( ()<left>
+inoremap (( (
+inoremap () ()
+
+" Automatic insert a closing brackets when type square bracket
+inoremap [ []<left>
+inoremap [[ [
+inoremap [] []
+
+" Automatic insert a closing brackets when type curly bracket
+inoremap { {}<left>
+inoremap {{ {
+inoremap {} {}
+
+" Automatic insert a closing bracket to the next line when type curly bracket and enter
+inoremap {<CR> {<CR>}<ESC>O
+
+" Automatic insert a closing bracket and semi-colon to the next line when type curly bracket, semi-colon and enter
+inoremap {;<CR> {<CR>};<ESC>O
+
