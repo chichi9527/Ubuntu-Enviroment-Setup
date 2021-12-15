@@ -8,7 +8,7 @@ DEST_VIMRC=".vimrc"
 
 DPKGS_TOOL="vim htop openssh-server"
 DPKGS_COMPILER="gcc g++ python"
-DPKGS="$DPKGS_TOOLS $DPKGS_COMPILER"
+DPKGS="$DPKGS_TOOL $DPKGS_COMPILER"
 
 ################################
 ##            MAIN            ##
@@ -18,4 +18,4 @@ cp $PWD/$SRC_VIMRC $HOME/$DEST_VIMRC
 
 sudo apt update
 sudo apt -y upgrade
-sudo apt -y install $DEBIAN_PACKAGES
+sudo apt install -y $DPKGS
