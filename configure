@@ -6,9 +6,10 @@
 SRC_VIMRC="vimrc"
 DEST_VIMRC=".vimrc"
 
+DPKGS_COMPILER="make gcc g++ python"
+DPKGS_CROSS_COMPILER="gcc-aarch64-linux-gnu g++-aarch64-linux-gnu qemu"
 DPKGS_TOOL="vim htop openssh-server net-tools"
-DPKGS_COMPILER="gcc g++ python"
-DPKGS="$DPKGS_TOOL $DPKGS_COMPILER"
+DPKGS="$DPKGS_COMPILER $DPKGS_CROSS_COMPILER $DPKGS_TOOL"
 
 ################################
 ##            MAIN            ##
