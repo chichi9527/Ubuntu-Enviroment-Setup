@@ -18,7 +18,10 @@ set nobackup
 set scrolloff=8
 
 " Do not wrap lines. Allow long lines to extend as far as the line goes.
-set nowrap
+" set nowrap
+
+" Automatic change line if that is too long.
+set wrap
 
 " Show partial command you type in the last line of the screen.
 set showcmd
@@ -31,6 +34,9 @@ set laststatus=2
 
 " Set background color.
 set background=dark
+
+" Enable or disable syntax highlighting
+syntax on
 
 
 "##########################################
@@ -70,6 +76,9 @@ set expandtab
 " Show the current pair of brackets.
 " set showmatch
 
+" Set backspace key work in the insert mode.
+set backspace=indent,eol,start
+
 " Automatically remove useless whitespace.
 autocmd BufWritePre * :%s/\s\+$//e
 
@@ -104,4 +113,13 @@ inoremap {<CR> {<CR>}<ESC>O
 
 " Automatic insert a closing bracket and semi-colon to the next line when type curly bracket, semi-colon and enter
 inoremap {;<CR> {<CR>};<ESC>O
+
+
+"##########################################
+"##                Others                ##
+"##########################################
+
+" Necesary for lots of cool vim things
+set nocompatible
+
 

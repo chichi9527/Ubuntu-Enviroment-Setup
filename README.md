@@ -1,2 +1,4 @@
 # Ubuntu-Enviroment-Setup
-Set up the enviroment.
+
+Type command as following:
+$ ./configure
