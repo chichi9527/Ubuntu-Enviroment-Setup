@@ -11,6 +11,7 @@ DPKGS_CROSS_COMPILER="gcc-aarch64-linux-gnu g++-aarch64-linux-gnu qemu"
 DPKGS_TOOL="vim htop openssh-server net-tools tree"
 DPKGS="$DPKGS_COMPILER $DPKGS_CROSS_COMPILER $DPKGS_TOOL"
 
+
 ################################
 ##            MAIN            ##
 ################################
