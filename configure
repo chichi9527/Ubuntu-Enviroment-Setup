@@ -16,8 +16,14 @@ DPKGS="$DPKGS_COMPILER $DPKGS_CROSS_COMPILER $DPKGS_TOOL"
 ##            MAIN            ##
 ################################
 
+# Set up VIM
 cp $PWD/$SRC_VIMRC $HOME/$DEST_VIMRC
 
+# Install debien packages
 sudo apt update
 sudo apt -y upgrade
 sudo apt install -y $DPKGS
+
+# Install private commands
+make
+make install

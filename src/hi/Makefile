@@ -19,7 +19,7 @@ clean:
 
 .PHONY: install
 install: $(TARGET)
-	mkdir $(DESTDIR)
+	mkdir -p $(DESTDIR)
 	cp $(TARGET) $(DESTDIR)
 
 .PHONY: uninstall

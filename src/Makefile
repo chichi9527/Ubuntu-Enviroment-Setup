@@ -12,20 +12,18 @@ all: $(BUILD_SUBDIRS)
 $(BUILD_SUBDIRS):
 	$(MAKE) -C $(@:build-%=%)
 
-
 .PHONY: clean $(CLEAN_SUBDIRS)
 clean: $(CLEAN_SUBDIRS)
 
 $(CLEAN_SUBDIRS):
 	$(MAKE) -C $(@:clean-%=%) clean
 
-
 .PHONY: install $(INSTALL_SUBDIRS)
 install: $(INSTALL_SUBDIRS)
 
 $(INSTALL_SUBDIRS):
+	mkdir -p $(DESTDIR)
 	$(MAKE) -C $(@:install-%=%) install
-
 
 .PHONY: uninstall $(UNINSTALL_SUBDIRS)
 uninstall: $(UNINSTALL_SUBDIRS)
