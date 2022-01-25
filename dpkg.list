@@ -1,0 +1,26 @@
+###################
+#    Compilers    #
+###################
+make
+gcc
+g++
+python
+
+########################
+#    Cross-Compilers   #
+########################
+gcc-aarch64-linux-gnu
+g++-aarch64-linux-gnu
+gcc-8-aarch64-linux-gnu
+g++-8-aarch64-linux-gnu
+qemu
+
+###############
+#    Tools    #
+###############
+vim
+htop
+openssh-server
+net-tools
+tree
+

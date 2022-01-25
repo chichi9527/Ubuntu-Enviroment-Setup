@@ -1,5 +1,5 @@
 SUBDIRS := hi
-SUBDIRS += hello
+SUBDIRS += bye
 
 BUILD_SUBDIRS       = $(SUBDIRS:%=build-%)
 CLEAN_SUBDIRS       = $(SUBDIRS:%=clean-%)

@@ -3,13 +3,10 @@
 ################################
 ##         DEFINITION         ##
 ################################
+
 SRC_VIMRC="vimrc"
 DEST_VIMRC=".vimrc"
-
-DPKGS_COMPILER="make gcc g++ python"
-DPKGS_CROSS_COMPILER="gcc-aarch64-linux-gnu g++-aarch64-linux-gnu qemu"
-DPKGS_TOOL="vim htop openssh-server net-tools tree"
-DPKGS="$DPKGS_COMPILER $DPKGS_CROSS_COMPILER $DPKGS_TOOL"
+DPKG_LIST="dpkg.list"
 
 
 ################################
@@ -20,6 +17,16 @@ DPKGS="$DPKGS_COMPILER $DPKGS_CROSS_COMPILER $DPKGS_TOOL"
 cp $PWD/$SRC_VIMRC $HOME/$DEST_VIMRC
 
 # Install debien packages
+DPKGS=""
+while read line
+do
+    if [[ ${line:0:1} != "#" && -n ${line} ]]
+    then
+        DPKGS=$DPKGS"${line}"
+        DPKGS=$DPKGS" "
+    fi
+done < $DPKG_LIST
+
 sudo apt update
 sudo apt -y upgrade
 sudo apt install -y $DPKGS
@@ -27,3 +34,5 @@ sudo apt install -y $DPKGS
 # Install private commands
 make
 make install
+
+

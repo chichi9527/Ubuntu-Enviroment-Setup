@@ -1,4 +1,4 @@
-TARGET      := hello
+TARGET      := bye
 SOURCES     := main.c
 CC          := gcc
 CCFLAGS     := -O2
