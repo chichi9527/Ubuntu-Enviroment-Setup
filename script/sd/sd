@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DIR="$HOME/etc/sd"
+LIST="$DIR/sd.list"
+TMP_LIST="$LIST.tmp"
+
+mkdir -p $DIR
+
+if [ -f "$LIST" ] ; then
+    i=0
+    while read line
+    do
+        i=$((i+1))
+        if [[ ${line} != $PWD ]] ; then
+            echo ${line} >> $TMP_LIST
+        fi
+    done < $LIST
+fi
+
+echo $PWD >> $TMP_LIST
+mv $TMP_LIST $LIST
+

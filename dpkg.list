@@ -6,6 +6,7 @@ gcc
 g++
 python
 
+
 ########################
 #    Cross-Compilers   #
 ########################
@@ -15,6 +16,7 @@ gcc-8-aarch64-linux-gnu
 g++-8-aarch64-linux-gnu
 qemu
 
+
 ###############
 #    Tools    #
 ###############
@@ -23,4 +25,5 @@ htop
 openssh-server
 net-tools
 tree
+
 
