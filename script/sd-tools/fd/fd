@@ -1,7 +1,47 @@
 #!/bin/bash
 
-DIR="$HOME/etc/sd"
-LIST="$DIR/sd.list"
+DIR="${HOME}/etc/sd"
+LIST="${DIR}/sd.list"
 
-rm -f $LIST
+COLOR_HINT="\033[0;33m"
+COLOR_ERROR="\033[0;31m"
+COLOR_RESET="\033[0m"
+
+MANUAL(){
+    echo -e "NAME"
+    echo -e "    fd - Flush Directory"
+    echo -e ""
+    echo -e "SYNOPSIS"
+    echo -e "    fd"
+    echo -e "    fd [OPTION]"
+    echo -e ""
+    echo -e "DESCRIPTION"
+    echo -e "    Flush all of the directories in the stack"
+    echo -e "    You can use fd command with the following commands:"
+    echo -e "        sd - Store Directory"
+    echo -e "        wd - Watch Directory"
+    echo -e "        rd - Remove Directory"
+    echo -e ""
+    echo -e "OPTION"
+    echo -e "    -h, --help                  show manual"
+    echo -e ""
+}
+
+HINT_MANUAL(){
+    echo -e "Try 'fd --help' for more information"
+}
+
+if [[ ${1} = "-h" ]] || [[ ${1} = "--help" ]] ; then
+    MANUAL
+    exit 0
+fi
+
+if [[ -n ${1} ]] ; then
+    echo -e "${COLOR_ERROR}Error: Incorrect argument${COLOR_RESET}"
+    HINT_MANUAL
+    exit 0
+fi
+
+rm -f ${LIST}
+echo -e "${COLOR_HINT}Flush directories${COLOR_RESET}"
 
