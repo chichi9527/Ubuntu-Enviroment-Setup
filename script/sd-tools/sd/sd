@@ -1,22 +1,77 @@
 #!/bin/bash
 
-DIR="$HOME/etc/sd"
-LIST="$DIR/sd.list"
-TMP_LIST="$LIST.tmp"
+DIR="${HOME}/etc/sd"
+LIST="${DIR}/sd.list"
+TMP_LIST="${LIST}.tmp"
 
-mkdir -p $DIR
+COLOR_HINT="\033[0;33m"
+COLOR_ERROR="\033[0;31m"
+COLOR_RESET="\033[0m"
 
-if [ -f "$LIST" ] ; then
+MANUAL(){
+    echo -e "NAME"
+    echo -e "    sd - Store Directory"
+    echo -e ""
+    echo -e "SYNOPSIS"
+    echo -e "    sd"
+    echo -e "    sd DIRECTORY"
+    echo -e "    sd [OPTION]"
+    echo -e ""
+    echo -e "DESCRIPTION"
+    echo -e "    Store the current directory, or the specified DIRECTORY into the STACK"
+    echo -e "    You can use sd command with the following commands:"
+    echo -e "        wd - Watch Directory"
+    echo -e "        rd - Remove Directory"
+    echo -e "        fd - Flash Directory"
+    echo -e ""
+    echo -e "OPTION"
+    echo -e "    -h, --help                  show manual"
+    echo -e ""
+}
+
+HINT_MANUAL(){
+    echo -e "Try 'sd --help' for more information"
+}
+
+ERROR_DIR(){
+    echo -e "${COLOR_ERROR}Error: Nonexist directory${COLOR_RESET}"
+    HINT_MANUAL
+    exit 0
+}
+
+TMP_PWD=${PWD}
+mkdir -p ${DIR}
+if [[ ${1} = "-h" ]] || [[ ${1} = "--help" ]] ; then
+    MANUAL
+    exit 0
+elif [[ -n ${1} ]] ; then
+    if [ -d ${1} ] ; then
+        TMP_PWD=${1}
+    elif [[ ${1:0:1} = "/" ]] ; then
+        ERROR_DIR
+    elif [ -d ${TMP_PWD}/${1} ] ; then
+        TMP_PWD=${TMP_PWD}/${1}
+    else
+        ERROR_DIR
+    fi
+
+    cd ${TMP_PWD}
+    TMP_PWD=${PWD}
+fi
+
+if [ -f ${LIST} ] ; then
     i=0
     while read line
     do
         i=$((i+1))
-        if [[ ${line} != $PWD ]] ; then
-            echo ${line} >> $TMP_LIST
+        if [[ ${line} != ${TMP_PWD} ]] ; then
+            echo ${line} >> ${TMP_LIST}
         fi
-    done < $LIST
+    done < ${LIST}
 fi
 
-echo $PWD >> $TMP_LIST
-mv $TMP_LIST $LIST
+echo ${TMP_PWD} >> ${TMP_LIST}
+mv ${TMP_LIST} ${LIST}
+
+echo -e "${COLOR_HINT}Store directory: ${PWD}${COLOR_RESET}"
 
