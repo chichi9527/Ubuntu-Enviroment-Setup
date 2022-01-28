@@ -1,8 +1,8 @@
 #!/bin/bash
 
 wd(){
-    DIR="$HOME/etc/sd"
-    LIST="$DIR/sd.list"
+    DIR="${HOME}/etc/sd"
+    LIST="${DIR}/sd.list"
 
     # Color Setting
     COLOR_MSG="\033[0;34m"
@@ -11,6 +11,31 @@ wd(){
     COLOR_NUMBER="\033[0;36m"
     COLOR_QUIT="\033[0;35m"
     COLOR_RESET="\033[0m"
+
+    MANUAL(){
+        echo -e "NAME"
+        echo -e "    wd - Watch Directory"
+        echo -e ""
+        echo -e "SYNOPSIS"
+        echo -e "    wd"
+        echo -e "    wd NUMBER"
+        echo -e "    wd [OPTION]"
+        echo -e ""
+        echo -e "DESCRIPTION"
+        echo -e "    Watch the LIST of directory stored in the stack and transfer to one of the directory"
+        echo -e "    You can use wd command with the following commands:"
+        echo -e "        sd - Store Directory"
+        echo -e "        rd - Remove Directory"
+        echo -e "        fd - Flash Directory"
+        echo -e ""
+        echo -e "OPTION"
+        echo -e "    -h, --help                  show manual"
+        echo -e ""
+    }
+
+    HINT_MANUAL(){
+        echo -e "Try 'wd --help' for more information"
+    }
 
     IS_VALID_DIRECTORY(){
         if [[ ${1:0:1} = "/" ]] ; then
@@ -24,51 +49,59 @@ wd(){
         return
     }
 
-    if [ ! -f "$LIST" ] ; then
+    if [ ! -f "${LIST}" ] ; then
         EMPTY_STACK
         return
+    fi
+
+    if [[ -z ${1} ]] ; then
+
+        i=0
+        while read line
+        do
+            IS_VALID_DIRECTORY ${line}
+
+            valid=${?}
+
+            if [[ ${valid} -eq 1 ]] ; then
+                i=$((i+1))
+
+                if [[ ${i} -eq 1 ]] ; then
+                    echo -e "${COLOR_MSG}List of directory in the stack:${COLOR_RESET}"
+             fi
+
+                echo -e "${COLOR_NUMBER}${i}) ${COLOR_RESET}${line}"
+
+            fi
+        done < ${LIST}
+
+        if [[ ${i} -eq 0 ]] ; then
+            EMPTY_STACK
+            return
+        fi
+
+        echo -e "${COLOR_NUMBER}q) ${COLOR_QUIT}quit${COLOR_RESET}"
+
+        read -p "Which directory do you'd like to transfer to ([number]/q)? " answer
+
+        if [[ ${answer} = "q" ]] || [[ ${answer} = "Q" ]] || [[ ${answer} = "quit" ]] || [[ ${answer} = "QUIT" ]] || [[ -z ${answer} ]]
+        then
+            return
+        fi
+    elif [[ ${1} = "-h" ]] || [[ ${1} = "--help" ]] ; then
+        MANUAL
+        return
+    else
+        answer=${1}
     fi
 
     i=0
     while read line
     do
         IS_VALID_DIRECTORY ${line}
-
-        valid=$?
+        valid=${?}
 
         if [[ ${valid} -eq 1 ]] ; then
-            i=$((i+1))
-
-            if [[ ${i} -eq 1 ]] ; then
-                echo -e "${COLOR_MSG}List of directory in the stack:${COLOR_RESET}"
-            fi
-
-            echo -e "${COLOR_NUMBER}${i}) ${COLOR_RESET}${line}"
-
-        fi
-    done < $LIST
-
-    if [[ ${i} -eq 0 ]] ; then
-        EMPTY_STACK
-        return
-    fi
-
-    echo -e "${COLOR_NUMBER}q) ${COLOR_QUIT}quit${COLOR_RESET}"
-
-    read -p "Which directory do you'd like to transfer to ([number]/q)? " answer
-
-    if [[ ${answer} = "q" ]] || [[ ${answer} = "Q" ]] || [[ ${answer} = "quit" ]] || [[ ${answer} = "QUIT" ]] || [[ -z ${answer} ]]
-    then
-        return
-    fi
-
-    i=0
-    while read line
-    do
-        IS_VALID_DIRECTORY ${line}
-        valid=$?
-
-        if [[ $valid -eq 1 ]] ; then
             i=$((i+1))
 
             if [[ ${i} -eq ${answer} ]] ; then
@@ -77,8 +110,10 @@ wd(){
                 return
             fi
         fi
-    done < $LIST
+    done < ${LIST}
 
     echo -e "${COLOR_ERROR}Error: Incorrect input${COLOR_RESET}"
+    HINT_MANUAL
+
     return
 }
