@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DIR="$HOME/etc/sd"
+LIST="$DIR/sd.list"
+
+rm -f $LIST
+

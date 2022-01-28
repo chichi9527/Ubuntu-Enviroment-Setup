@@ -1,0 +1,82 @@
+#!/bin/bash
+
+DIR="$HOME/etc/sd"
+LIST="$DIR/sd.list"
+
+# Color Setting
+COLOR_MSG="\033[0;34m"
+COLOR_HINT="\033[0;33m"
+COLOR_ERROR="\033[0;31m"
+COLOR_NUMBER="\033[0;36m"
+COLOR_QUIT="\033[0;35m"
+COLOR_RESET="\033[0m"
+
+IS_VALID_DIRECTORY(){
+    if [[ ${1:0:1} = "/" ]] ; then
+        return 1
+    fi
+    return 0
+}
+
+EMPTY_STACK(){
+    echo -e "${COLOR_RESET}No directory was stored in the stack."
+    exit
+}
+
+if [ ! -f "$LIST" ] ; then
+    EMPTY_STACK
+fi
+
+i=0
+while read line
+do
+    IS_VALID_DIRECTORY ${line}
+
+    valid=$?
+
+    if [[ ${valid} -eq 1 ]] ; then
+        i=$((i+1))
+
+        if [[ ${i} -eq 1 ]] ; then
+            echo -e "${COLOR_MSG}List of directory in the stack:${COLOR_RESET}"
+        fi
+
+        echo -e "${COLOR_NUMBER}${i}) ${COLOR_RESET}${line}"
+
+    fi
+done < $LIST
+
+if [[ ${i} -eq 0 ]] ; then
+    EMPTY_STACK
+fi
+
+echo -e "${COLOR_NUMBER}q) ${COLOR_QUIT}quit${COLOR_RESET}"
+
+read -p "Which directory do you'd like to remove ([number]/q)? " answer
+
+if [[ ${answer} = "q" ]] || [[ ${answer} = "Q" ]] || [[ ${answer} = "quit" ]] || [[ ${answer} = "QUIT" ]] || [[ -z ${answer} ]]
+then
+    exit
+fi
+
+i=0
+line_no=0
+while read line
+do
+    line_no=$((line_no+1))
+
+    IS_VALID_DIRECTORY ${line}
+    valid=$?
+
+    if [[ $valid -eq 1 ]] ; then
+        i=$((i+1))
+
+        if [[ ${i} -eq ${answer} ]] ; then
+            echo -e "${COLOR_HINT}Directory removed${COLOR_RESET}"
+            sed -i "$((line_no))d" $LIST
+            exit 0
+        fi
+    fi
+done < $LIST
+
+echo -e "${COLOR_ERROR}Error: Incorrect input${COLOR_RESET}"

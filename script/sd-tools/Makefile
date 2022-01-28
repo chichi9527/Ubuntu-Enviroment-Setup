@@ -1,4 +1,7 @@
-SUBDIRS := sd-tools
+SUBDIRS := sd
+SUBDIRS += wd
+SUBDIRS += rd
+SUBDIRS += fd
 
 INSTALL_SUBDIRS     = $(SUBDIRS:%=install-%)
 UNINSTALL_SUBDIRS   = $(SUBDIRS:%=uninstall-%)
