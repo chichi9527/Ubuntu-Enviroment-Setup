@@ -26,7 +26,7 @@ wd(){
         echo -e "    You can use wd command with the following commands:"
         echo -e "        sd - Store Directory"
         echo -e "        rd - Remove Directory"
-        echo -e "        fd - Flash Directory"
+        echo -e "        fd - Flush Directory"
         echo -e ""
         echo -e "OPTION"
         echo -e "    -h, --help                  show manual"
@@ -45,9 +45,14 @@ wd(){
     }
 
     EMPTY_STACK(){
-        echo -e "${COLOR_RESET}No directory was stored in the stack."
+        echo -e "${COLOR_RESET}No directory in the stack."
         return
     }
+
+    if [[ ${1} = "-h" ]] || [[ ${1} = "--help" ]] ; then
+        MANUAL
+        return
+    fi
 
     if [ ! -f "${LIST}" ] ; then
         EMPTY_STACK
@@ -88,9 +93,6 @@ wd(){
         then
             return
         fi
-    elif [[ ${1} = "-h" ]] || [[ ${1} = "--help" ]] ; then
-        MANUAL
-        return
     else
         answer=${1}
     fi

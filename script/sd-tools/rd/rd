@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DIR="$HOME/etc/sd"
-LIST="$DIR/sd.list"
+DIR="${HOME}/etc/sd"
+LIST="${DIR}/sd.list"
 
 # Color Setting
 COLOR_MSG="\033[0;34m"
@@ -11,6 +11,31 @@ COLOR_NUMBER="\033[0;36m"
 COLOR_QUIT="\033[0;35m"
 COLOR_RESET="\033[0m"
 
+MANUAL(){
+    echo -e "NAME"
+    echo -e "    rd - Remove Directory"
+    echo -e ""
+    echo -e "SYNOPSIS"
+    echo -e "    rd"
+    echo -e "    rd NUMBER"
+    echo -e "    rd [OPTION]"
+    echo -e ""
+    echo -e "DESCRIPTION"
+    echo -e "    Watch the LIST of directory stored in the stack and REMOVE to one of the directory"
+    echo -e "    You can use rd command with the following commands:"
+    echo -e "        sd - Store Directory"
+    echo -e "        wd - Watch Directory"
+    echo -e "        fd - Flush Directory"
+    echo -e ""
+    echo -e "OPTION"
+    echo -e "    -h, --help                  show manual"
+    echo -e ""
+}
+
+HINT_MANUAL(){
+    echo -e "Try 'rd --help' for more information"
+}
+
 IS_VALID_DIRECTORY(){
     if [[ ${1:0:1} = "/" ]] ; then
         return 1
@@ -19,44 +44,54 @@ IS_VALID_DIRECTORY(){
 }
 
 EMPTY_STACK(){
-    echo -e "${COLOR_RESET}No directory was stored in the stack."
+    echo -e "${COLOR_RESET}No directory in the stack."
     exit
 }
 
-if [ ! -f "$LIST" ] ; then
+if [[ ${1} = "-h" ]] || [[ ${1} = "--help" ]] ; then
+    MANUAL
+    exit 0
+fi
+
+if [ ! -f "${LIST}" ] ; then
     EMPTY_STACK
 fi
 
-i=0
-while read line
-do
-    IS_VALID_DIRECTORY ${line}
+if [[ -z ${1} ]] ; then
 
-    valid=$?
+    i=0
+    while read line
+    do
+        IS_VALID_DIRECTORY ${line}
 
-    if [[ ${valid} -eq 1 ]] ; then
-        i=$((i+1))
+        valid=${?}
 
-        if [[ ${i} -eq 1 ]] ; then
-            echo -e "${COLOR_MSG}List of directory in the stack:${COLOR_RESET}"
+        if [[ ${valid} -eq 1 ]] ; then
+            i=$((i+1))
+
+            if [[ ${i} -eq 1 ]] ; then
+                echo -e "${COLOR_MSG}List of directory in the stack:${COLOR_RESET}"
+            fi
+
+            echo -e "${COLOR_NUMBER}${i}) ${COLOR_RESET}${line}"
+
         fi
+    done < ${LIST}
 
-        echo -e "${COLOR_NUMBER}${i}) ${COLOR_RESET}${line}"
-
+    if [[ ${i} -eq 0 ]] ; then
+        EMPTY_STACK
     fi
-done < $LIST
 
-if [[ ${i} -eq 0 ]] ; then
-    EMPTY_STACK
-fi
+    echo -e "${COLOR_NUMBER}q) ${COLOR_QUIT}quit${COLOR_RESET}"
 
-echo -e "${COLOR_NUMBER}q) ${COLOR_QUIT}quit${COLOR_RESET}"
+    read -p "Which directory do you'd like to remove ([number]/q)? " answer
 
-read -p "Which directory do you'd like to remove ([number]/q)? " answer
-
-if [[ ${answer} = "q" ]] || [[ ${answer} = "Q" ]] || [[ ${answer} = "quit" ]] || [[ ${answer} = "QUIT" ]] || [[ -z ${answer} ]]
-then
-    exit
+    if [[ ${answer} = "q" ]] || [[ ${answer} = "Q" ]] || [[ ${answer} = "quit" ]] || [[ ${answer} = "QUIT" ]] || [[ -z ${answer} ]]
+    then
+        exit 0
+    fi
+else
+    answer=${1}
 fi
 
 i=0
@@ -66,17 +101,18 @@ do
     line_no=$((line_no+1))
 
     IS_VALID_DIRECTORY ${line}
-    valid=$?
+    valid=${?}
 
-    if [[ $valid -eq 1 ]] ; then
+    if [[ ${valid} -eq 1 ]] ; then
         i=$((i+1))
 
         if [[ ${i} -eq ${answer} ]] ; then
             echo -e "${COLOR_HINT}Directory removed${COLOR_RESET}"
-            sed -i "$((line_no))d" $LIST
+            sed -i "$((line_no))d" ${LIST}
             exit 0
         fi
     fi
-done < $LIST
+done < ${LIST}
 
 echo -e "${COLOR_ERROR}Error: Incorrect input${COLOR_RESET}"
+HINT_MANUAL

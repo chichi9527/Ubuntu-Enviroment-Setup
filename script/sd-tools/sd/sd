@@ -22,7 +22,7 @@ MANUAL(){
     echo -e "    You can use sd command with the following commands:"
     echo -e "        wd - Watch Directory"
     echo -e "        rd - Remove Directory"
-    echo -e "        fd - Flash Directory"
+    echo -e "        fd - Flush Directory"
     echo -e ""
     echo -e "OPTION"
     echo -e "    -h, --help                  show manual"
